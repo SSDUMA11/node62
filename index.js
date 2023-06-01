@@ -14,10 +14,15 @@ app.get('/', async (req, res) => {
     const indexHtmlData = await fs.promises.readFile(indexHtml, 'utf8');
     const packageJsonData = await fs.promises.readFile(packageJson, 'utf8');
 
+    const packageJsonObj = JSON.parse(packageJsonData);
+    const updatedData = JSON.stringify(packageJsonObj, null, 2);
+
+    await fs.promises.writeFile(packageJson, updatedData, { encoding: 'utf-8' });
+
     res.send(`
       <h1>${indexHtmlData}</h1>
       <h2>Json text:</h2>
-      <pre>${packageJsonData}</pre>
+      <pre>${updatedData}</pre>
     `);
   } catch (err) {
     res.status(500).send('Error reading files');
